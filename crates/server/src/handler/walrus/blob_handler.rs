@@ -10,7 +10,7 @@ pub async fn blob_upload(
     blob_info: &BlobInfomation
 ) -> Result<BlobUploadResponse> {
     let client_address = blob_info.client_address();
-    let project_name = blob_info.project_name();
+    let identifier = blob_info.identifier();
     let blob_name = blob_info.blob_name();
     let blob_father_path = blob_info.blob_father_path();
 
@@ -29,7 +29,7 @@ pub async fn blob_upload(
     file.read_to_end(&mut contents).await?;
 
     let form = multipart::Form::new().part(
-        project_name.to_owned(),
+        identifier.to_owned(),
         multipart::Part::bytes(contents)
             .file_name(blob_name.to_string()) // Tên file hiển thị (tùy chọn)
             .mime_str("application/octet-stream")?, // Hoặc mime phù hợp
@@ -47,11 +47,12 @@ pub async fn blob_upload(
     if response.status().is_success() {
         let upload_response: QuiltUploadResponse = response.json().await?;
         let mut result = BlobUploadResponse::default();
+        result.set_status(true);
         result.set_quilt_upload_response(upload_response);
         Ok(result)
     } else {
         eprintln!("Error: {}", response.status());
         eprintln!("Body: {:?}", response.text().await?);
-        Err(anyhow!(""))
+        Err(anyhow!("Upload fail"))
     }
 }

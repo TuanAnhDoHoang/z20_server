@@ -6,7 +6,7 @@ use std::process::Stdio;
 use tokio::io::AsyncReadExt;
 use tokio::process::Command as TokioCommand;
 
-#[derive(Debug, serde::Serialize)]
+#[derive(Debug, serde::Serialize, Default)]
 pub struct WalrusPublishResult {
     pub success: bool,
     pub site_name: Option<String>,

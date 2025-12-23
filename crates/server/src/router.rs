@@ -30,15 +30,16 @@ pub struct AppRouter;
 impl AppRouter {
     pub fn init(services: Services) -> Router {
         let cors = CorsLayer::new()
-            .allow_origin(Any)
-            .allow_methods([
-                Method::GET,
-                Method::POST,
-                Method::DELETE,
-                Method::PUT,
-                Method::PATCH,
-            ])
-            .allow_headers([AUTHORIZATION, ACCEPT, CONTENT_TYPE]);
+            .allow_origin(Any).allow_methods(Any);
+        
+            //.allow_methods([
+            //    Method::GET,
+            //    Method::POST,
+            //    Method::DELETE,
+            //    Method::PUT,
+            //    Method::PATCH,
+            //])
+            //.allow_headers([AUTHORIZATION, ACCEPT, CONTENT_TYPE]);
 
         let index = ServeDir::new("dist").not_found_service(ServeFile::new("dist/index.html"));
 

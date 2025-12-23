@@ -9,7 +9,7 @@ mod test {
         let blob_father_path = "/home/anhdoo/codespace/walrus/docker_walrus/test-site";
 
         let mut blob_info = BlobInfomation::default();
-        blob_info.set_project_name(project_name.into());
+        blob_info.set_identifier(project_name.into());
         blob_info.set_client_address(client_address.into());
         blob_info.set_blob_name(blob_name.into());
         blob_info.set_blob_father_path(blob_father_path.into());

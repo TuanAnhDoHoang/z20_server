@@ -6,9 +6,8 @@ use std::io::Write;
 
 use crate::dtos::file_dto::BlobInfomation;
 
-pub async fn handle_upload_chunk(mut multipart: Multipart) -> Result<BlobInfomation> {
+pub async fn handle_upload_chunk(mut multipart: Multipart) -> Result<(bool, BlobInfomation)> {
     let mut upload_id = String::new();
-    let mut client_address = String::new();
     let mut identifier = String::new();
     let mut file_name = String::new();
     let mut chunk_number = 0;
@@ -29,12 +28,6 @@ pub async fn handle_upload_chunk(mut multipart: Multipart) -> Result<BlobInfomat
                 upload_id = field.text().await.unwrap_or_default();
                 if upload_id.is_empty() {
                     return Err(anyhow!("Upload Id not found"));
-                }
-            }
-            "clientAddress" => {
-                client_address = field.text().await.unwrap_or_default();
-                if client_address.is_empty() {
-                    return Err(anyhow!("Client address not found"));
                 }
             }
             "identifier" => {
@@ -85,27 +78,29 @@ pub async fn handle_upload_chunk(mut multipart: Multipart) -> Result<BlobInfomat
         return Err(anyhow!(""));
     }
 
-    let project_dir = format!("/tmp/uploads/{upload_id}");
-    create_dir(&project_dir)?;
-
     // If all chunks are uploaded, assemble the file
     if is_upload_complete(&temp_dir, total_chunks) {
+        let project_dir = format!("/tmp/uploads/{upload_id}");
+        create_dir(&project_dir)?;
+
         if let Err(err) = assemble_file(&temp_dir, &project_dir, &file_name, total_chunks) {
             eprintln!("Failed to assemble file: {file_name:?}, Error: {err:?}");
             return Err(anyhow!(""));
         }
-    }
 
-    let mut result = BlobInfomation::default();
-    result.set_project_name(identifier);
-    result.set_client_address(client_address);
-    result.set_blob_name(file_name);
-    result.set_blob_father_path(project_dir);
-    Ok(result)
+        let mut result = BlobInfomation::default();
+        result.set_identifier(identifier);
+        result.set_blob_name(file_name);
+        result.set_blob_father_path(project_dir);
+        Ok((true, result))
+
+    } else {
+        Ok((false, BlobInfomation::default()))
+    }
 }
 
 // Sanitize filename to avoid directory traversal attacks
-fn sanitize_filename(filename: &str) -> String {
+pub fn sanitize_filename(filename: &str) -> String {
     filename.replace(&['/', '\\'][..], "").replace("..", "")
 }
 
@@ -137,10 +132,7 @@ fn assemble_file(
 //dir is full dir: /tmp/anhdoo.png
 fn create_dir(full_dir: &str) -> Result<()> {
     if let Err(err) = fs::create_dir_all(full_dir) {
-        eprintln!(
-            "Failed to create temp directory: {:?}, Error: {:?}",
-            full_dir, err
-        );
+        eprintln!("Failed to create temp directory: {full_dir:?}, Error: {err:?}");
         return Err(anyhow!(""));
     }
     Ok(())

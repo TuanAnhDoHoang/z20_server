@@ -1,8 +1,8 @@
+
 use getset::{Getters, Setters};
 use serde::{Deserialize, Serialize};
 use validator::Validate;
 
-// #[derive(Debug, Clone, Serialize, Deserialize, Validate, Default, Getters, Setters)]
 // #[getset(get = "pub", set = "pub")]
 // pub struct BlobUploadRequest {
 //     #[serde(rename = "projectName")]
@@ -13,9 +13,20 @@ use validator::Validate;
 //     client_address: String, //wallet address of client
 // }
 
+
+#[derive(Debug, Clone, Serialize, Deserialize, Validate, Default, Getters, Setters)]
+#[getset(get = "pub", set = "pub")]
+pub struct BlobUpdateDto{
+    project_id: String,
+    blob_id: String,
+    identifier: String,
+    file_name: String,
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize, Validate, Default, Getters, Setters)]
 #[getset(get = "pub", set = "pub")]
 pub struct BlobUploadResponse {
+    status: bool,
     #[serde(rename = "storedQuiltBlobs")]
     quilt_upload_response: QuiltUploadResponse,
 }

@@ -7,6 +7,7 @@ use serde::de::DeserializeOwned;
 use utils::AppError;
 use validator::Validate;
 
+#[allow(dead_code)]
 pub struct ValidationExtractor<T>(pub T);
 
 #[async_trait]

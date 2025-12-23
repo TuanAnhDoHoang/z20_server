@@ -7,9 +7,11 @@ use tracing::info;
 
 use utils::{AppConfig, AppResult};
 
+use crate::walrus::model::Project;
+
 #[derive(Clone, Debug)]
 pub struct Database {
-    pub project_col: Collection<_>,
+    pub project_col: Collection<Project>,
 }
 
 impl Database {
@@ -32,6 +34,8 @@ impl Database {
         let db = client.database(&config.mongo_db);
         // let project_col: Collection<User> = db.collection("User");
         let project_col = db.collection("projects");
+
+        println!("connect to {}::{}", &config.mongo_uri, &config.mongo_db);
 
         info!("initializing database connection...");
 

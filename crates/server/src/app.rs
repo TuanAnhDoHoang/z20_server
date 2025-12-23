@@ -1,4 +1,4 @@
-use anyhow::Context;
+use anyhow::{anyhow, Context};
 use axum::serve;
 use database::Database;
 use std::sync::Arc;
@@ -25,7 +25,17 @@ impl ApplicationServer {
 
         info!("server has launched on {local_addr} 🚀");
 
-        let db = Database::new(config.clone()).await?;
+        let db = match Database::new(config.clone()).await {
+            Ok(db) => {
+                info!("Connected successfully");
+                db
+            }
+            Err(e) => {
+                eprintln!("Failed to connect: {e:?}");
+                return Err(anyhow!("Connect Database error: {e}"))
+            }
+        };
+        // In your main.rs or where you call Database::new()
         let services = Services::new(db);
         let router = AppRouter::init(services);
 

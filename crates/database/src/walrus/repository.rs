@@ -2,7 +2,10 @@ use std::sync::Arc;
 
 use anyhow::Result;
 use async_trait::async_trait;
-use mongodb::{bson::{doc, oid::ObjectId}, results::UpdateResult};
+use mongodb::{
+    bson::{doc, oid::ObjectId},
+    results::UpdateResult,
+};
 
 use crate::Database;
 
@@ -11,33 +14,53 @@ use crate::Database;
 pub type DynProjectRepository = Arc<dyn ProjectRepositoryTrait + Send + Sync>;
 
 #[async_trait]
-pub trait ProjectRepositoryTrait{
-    async fn update_walrus_blob(&mut self, project_id: &str, blob_id: &str) -> Result<UpdateResult>;
-    async fn update_walrus_site(&mut self, project_id: &str, site_id: &str) -> Result<UpdateResult>;
+pub trait ProjectRepositoryTrait {
+    async fn update_walrus_blob(
+        &self,
+        project_id: &str,
+        blob_id: &str,
+        identifier: &str,
+        file_name: &str,
+    ) -> Result<UpdateResult>;
+    async fn update_walrus_site(&self, project_id: &str, site_id: &str) -> Result<UpdateResult>;
 }
 #[async_trait]
-impl ProjectRepositoryTrait for Database{
-    async fn update_walrus_blob(&mut self, project_id: &str, blob_id: &str) -> Result<UpdateResult>{
+impl ProjectRepositoryTrait for Database {
+    async fn update_walrus_blob(
+        &self,
+        project_id: &str,
+        quilt_id: &str,
+        identifier: &str,
+        file_name: &str,
+    ) -> Result<UpdateResult> {
         let id = ObjectId::parse_str(project_id)?;
         let filter = doc! {"_id": id};
-        let new_doc = doc! {
-            "$set":
-                {
-                    "blobId": blob_id,
-                },
+        let update = doc! {
+            "$set": {
+                "quilt": {
+                    "id": quilt_id,
+                    "identifier": identifier,
+                    "file_name": file_name,
+                }
+            }
         };
-
-        let updated_doc = self.project_col.update_one(filter, new_doc).await?;
+        let updated_doc = self.project_col.update_one(filter, update).await?;
 
         Ok(updated_doc)
     }
-    async fn update_walrus_site(&mut self, project_id: &str, site_id: &str) -> Result<UpdateResult>{
+    async fn update_walrus_site(
+        &self,
+        project_id: &str,
+        site_id: &str,
+    ) -> Result<UpdateResult> {
         let id = ObjectId::parse_str(project_id)?;
         let filter = doc! {"_id": id};
         let new_doc = doc! {
             "$set":
                 {
-                    "siteId": site_id,
+                    "site": {
+                        "id": site_id,
+                    }
                 },
         };
 

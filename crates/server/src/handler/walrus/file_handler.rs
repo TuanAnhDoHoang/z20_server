@@ -18,8 +18,8 @@ pub async fn handle_upload_chunk(mut multipart: Multipart) -> Result<(bool, Blob
     while let Some(field) = match multipart.next_field().await {
         Ok(f) => f,
         Err(err) => {
-            eprintln!("Error reading multipart field: {err:?}");
-            return Err(anyhow!(""));
+            println!("Error reading multipart field: {err:?}");
+            return Err(anyhow!("error reading multipart"));
         }
     } {
         let field_name = field.name().unwrap_or_default().to_string();
@@ -50,8 +50,8 @@ pub async fn handle_upload_chunk(mut multipart: Multipart) -> Result<(bool, Blob
                 match field.bytes().await {
                     Ok(bytes) => chunk_data = bytes.to_vec(), // Convert Bytes to Vec<u8>
                     Err(err) => {
-                        eprintln!("Error reading chunk data: {err:?}");
-                        return Err(anyhow!(""));
+                        println!("Error reading chunk data: {err:?}");
+                        return Err(anyhow!("Error parsing chunk"));
                     }
                 }
             }
@@ -61,7 +61,7 @@ pub async fn handle_upload_chunk(mut multipart: Multipart) -> Result<(bool, Blob
 
     // Validate that required fields are provided
     if upload_id.is_empty() || file_name.is_empty() || chunk_data.is_empty() || total_chunks == 0 {
-        eprintln!("Missing required fields: file_name: {file_name}, chunk_data: {chunk_data:?}");
+        println!("Missing required fields: file_name: {file_name}, chunk_data: {chunk_data:?}");
         return Err(anyhow!(""));
     }
 
@@ -139,11 +139,11 @@ fn create_dir(full_dir: &str) -> Result<()> {
 }
 
 fn create_file(full_dir: &str) -> Result<File> {
-    match File::create(&full_dir) {
+    match File::create(full_dir) {
         Ok(f) => Ok(f),
         Err(err) => {
-            eprintln!("Failed to create file: {:?}, Error: {:?}", full_dir, err);
-            return Err(anyhow!(""));
+            eprintln!("Failed to create file: {full_dir:?}, Error: {err:?}");
+            Err(anyhow!(""))
         }
     }
 }

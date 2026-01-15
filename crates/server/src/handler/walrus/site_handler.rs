@@ -16,6 +16,7 @@ pub struct WalrusPublishResult {
 }
 
 pub async fn upload_walrus_site(project_dir: &str) -> Result<WalrusPublishResult> {
+    println!("=================Log_from_upload_walrus_site===========");
     let project_path = Path::new(project_dir);
     let ws_resources_path = project_path.join("ws-resources.json");
 
@@ -39,6 +40,8 @@ pub async fn upload_walrus_site(project_dir: &str) -> Result<WalrusPublishResult
     //     .stderr(Stdio::piped())
     //     .spawn()?;
 
+    println!("project path: {project_path:?}");
+
     // Chạy Commandline publish
     let site_config_path = "/etc/walrus/sites-config.yaml";
     let mut child = TokioCommand::new("site-builder")
@@ -60,7 +63,7 @@ pub async fn upload_walrus_site(project_dir: &str) -> Result<WalrusPublishResult
                 match stderr.read(&mut buf).await {
                     Ok(0) => break,
                     Ok(n) => {
-                        eprint!("{}", String::from_utf8_lossy(&buf[..n]));
+                        eprint!("Read stderr{}", String::from_utf8_lossy(&buf[..n]));
                     }
                     Err(_) => break,
                 }

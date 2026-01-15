@@ -3,7 +3,7 @@ use serde_json::Value;
 use std::fs;
 use std::path::Path;
 use std::process::Stdio;
-use tokio::io::AsyncReadExt;
+use tokio::io::{AsyncBufReadExt, AsyncReadExt};
 use tokio::process::Command as TokioCommand;
 
 #[derive(Debug, serde::Serialize, Default)]
@@ -14,7 +14,6 @@ pub struct WalrusPublishResult {
     pub message: String,
     pub raw_json: Option<Value>, // Toàn bộ nội dung ws-resources.json nếu cần
 }
-
 pub async fn upload_walrus_site(project_dir: &str) -> Result<WalrusPublishResult> {
     println!("=================Log_from_upload_walrus_site===========");
     let project_path = Path::new(project_dir);
@@ -23,26 +22,8 @@ pub async fn upload_walrus_site(project_dir: &str) -> Result<WalrusPublishResult
     // Xóa file cũ nếu tồn tại (tránh trường hợp cũ còn sót)
     let _ = fs::remove_file(&ws_resources_path);
 
-    // Chạy Docker publish
-    // let mut child = TokioCommand::new("docker")
-    //     .arg("run")
-    //     .arg("--rm")
-    //     .arg("-v")
-    //     .arg(format!("{project_dir}:/site"))
-    //     // .arg("-v")
-    //     // .arg(format!("{home}:/root/.sui/sui_config"))
-    //     .arg("walrus-site-builder:testnet")
-    //     .arg("publish")
-    //     .arg("/site")
-    //     .arg("--epochs")
-    //     .arg("1")
-    //     .stdout(Stdio::piped())
-    //     .stderr(Stdio::piped())
-    //     .spawn()?;
-
     println!("project path: {project_path:?}");
 
-    // Chạy Commandline publish
     let site_config_path = "/etc/walrus/sites-config.yaml";
     let mut child = TokioCommand::new("site-builder")
         .arg("--config")
@@ -55,15 +36,21 @@ pub async fn upload_walrus_site(project_dir: &str) -> Result<WalrusPublishResult
         .stderr(Stdio::piped())
         .spawn()?;
 
-    // Đọc stderr realtime để log lỗi nếu có
-    if let Some(mut stderr) = child.stderr.take() {
+    // Capture stdout and stderr
+    let stdout = child.stdout.take();
+    let stderr = child.stderr.take();
+
+    // Log stderr realtime
+    if let Some(stderr) = stderr {
         tokio::spawn(async move {
-            let mut buf = [0; 1024];
+            let mut reader = tokio::io::BufReader::new(stderr);
+            let mut line = String::new();
             loop {
-                match stderr.read(&mut buf).await {
+                match reader.read_line(&mut line).await {
                     Ok(0) => break,
-                    Ok(n) => {
-                        eprint!("Read stderr{}", String::from_utf8_lossy(&buf[..n]));
+                    Ok(_) => {
+                        eprintln!("stderr: {}", line.trim());
+                        line.clear();
                     }
                     Err(_) => break,
                 }
@@ -71,7 +58,25 @@ pub async fn upload_walrus_site(project_dir: &str) -> Result<WalrusPublishResult
         });
     }
 
-    // Chờ Docker kết thúc
+    // Log stdout realtime
+    if let Some(stdout) = stdout {
+        tokio::spawn(async move {
+            let mut reader = tokio::io::BufReader::new(stdout);
+            let mut line = String::new();
+            loop {
+                match reader.read_line(&mut line).await {
+                    Ok(0) => break,
+                    Ok(_) => {
+                        println!("stdout: {}", line.trim());
+                        line.clear();
+                    }
+                    Err(_) => break,
+                }
+            }
+        });
+    }
+
+    // Chờ process kết thúc
     let status = child.wait().await?;
 
     if !status.success() {
@@ -83,6 +88,9 @@ pub async fn upload_walrus_site(project_dir: &str) -> Result<WalrusPublishResult
             raw_json: None,
         });
     }
+
+    // Add delay to ensure file is written
+    tokio::time::sleep(tokio::time::Duration::from_millis(500)).await;
 
     // Kiểm tra file ws-resources.json có được tạo không
     if !ws_resources_path.exists() {
@@ -99,7 +107,6 @@ pub async fn upload_walrus_site(project_dir: &str) -> Result<WalrusPublishResult
     let content = fs::read_to_string(&ws_resources_path)?;
     let json: Value = serde_json::from_str(&content)?;
 
-    // Extract thông tin cần thiết (dựa trên cấu trúc thực tế của file)
     let site_name = json
         .get("site_name")
         .and_then(|v| v.as_str())
@@ -112,7 +119,6 @@ pub async fn upload_walrus_site(project_dir: &str) -> Result<WalrusPublishResult
         .map(|s| s.to_string());
 
     println!("\njson result: {json:?}\n");
-
 
     Ok(WalrusPublishResult {
         success: true,

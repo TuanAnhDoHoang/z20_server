@@ -86,10 +86,11 @@ impl WalrusController {
             .get("projectId")
             .ok_or_else(|| AppError::BadRequest("Missing projectId".to_string()));
 
+        println!("Request content: {req:?}");
+
         let (status, mut blob_info) = handle_upload_chunk(req)
             .await
             .map_err(|_| utils::AppError::InternalServerError)?;
-
 
         if !status {
             let mut response = WalrusPublishResult::default();
@@ -108,6 +109,8 @@ impl WalrusController {
         println!("blob_info: {:?}", blob_info);
 
         let response = upload_walrus_site(blob_info.blob_father_path()).await?;
+        
+        println!("Upload response: {:?}", response);
 
         // if response.success {
         //     let mut blob_update_dto = BlobUpdateDto::default();

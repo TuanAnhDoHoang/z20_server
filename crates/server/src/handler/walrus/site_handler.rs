@@ -15,10 +15,7 @@ pub struct WalrusPublishResult {
     pub raw_json: Option<Value>, // Toàn bộ nội dung ws-resources.json nếu cần
 }
 
-pub async fn upload_walrus_site(
-    project_dir: &str,
-) -> Result<WalrusPublishResult> {
-    let home = "/home/anhdoo/.sui/sui_config"; // Có thể lấy từ env::var("HOME") nếu linh hoạt hơn
+pub async fn upload_walrus_site(project_dir: &str) -> Result<WalrusPublishResult> {
     let project_path = Path::new(project_dir);
     let ws_resources_path = project_path.join("ws-resources.json");
 
@@ -26,16 +23,29 @@ pub async fn upload_walrus_site(
     let _ = fs::remove_file(&ws_resources_path);
 
     // Chạy Docker publish
-    let mut child = TokioCommand::new("docker")
-        .arg("run")
-        .arg("--rm")
-        .arg("-v")
-        .arg(format!("{project_dir}:/site"))
-        .arg("-v")
-        .arg(format!("{home}:/root/.sui/sui_config"))
-        .arg("walrus-site-builder:testnet")
+    // let mut child = TokioCommand::new("docker")
+    //     .arg("run")
+    //     .arg("--rm")
+    //     .arg("-v")
+    //     .arg(format!("{project_dir}:/site"))
+    //     // .arg("-v")
+    //     // .arg(format!("{home}:/root/.sui/sui_config"))
+    //     .arg("walrus-site-builder:testnet")
+    //     .arg("publish")
+    //     .arg("/site")
+    //     .arg("--epochs")
+    //     .arg("1")
+    //     .stdout(Stdio::piped())
+    //     .stderr(Stdio::piped())
+    //     .spawn()?;
+
+    // Chạy Commandline publish
+    let site_config_path = "/etc/walrus/sites-config.yaml";
+    let mut child = TokioCommand::new("site-builder")
+        .arg("--config")
+        .arg(site_config_path)
         .arg("publish")
-        .arg("/site")
+        .arg(project_dir)
         .arg("--epochs")
         .arg("1")
         .stdout(Stdio::piped())
@@ -97,6 +107,9 @@ pub async fn upload_walrus_site(
         .or_else(|| json.get("site_object_id"))
         .and_then(|v| v.as_str())
         .map(|s| s.to_string());
+
+    println!("\njson result: {json:?}\n");
+
 
     Ok(WalrusPublishResult {
         success: true,

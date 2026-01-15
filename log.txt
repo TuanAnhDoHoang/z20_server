@@ -1,0 +1,101 @@
+[2m2026-01-15T02:14:13.930820Z[0m [32m INFO[0m [2mserver::app[0m[2m:[0m server has launched on 127.0.0.1:5000 🚀
+[2m2026-01-15T02:14:13.931355Z[0m [34mDEBUG[0m [2mhickory_proto::xfer::dns_handle[0m[2m:[0m querying: _mongodb._tcp.cluster0.02fhmf7.mongodb.net. SRV
+[2m2026-01-15T02:14:13.931501Z[0m [34mDEBUG[0m [2mhickory_resolver::name_server::name_server_pool[0m[2m:[0m sending request: [Query { name: Name("_mongodb._tcp.cluster0.02fhmf7.mongodb.net."), query_type: SRV, query_class: IN }]
+[2m2026-01-15T02:14:13.931576Z[0m [34mDEBUG[0m [2mhickory_resolver::name_server::name_server[0m[2m:[0m reconnecting: NameServerConfig { socket_addr: 192.168.100.1:53, protocol: Udp, tls_dns_name: None, http_endpoint: None, trust_negative_responses: false, bind_addr: None }
+[2m2026-01-15T02:14:13.931629Z[0m [34mDEBUG[0m [2mhickory_proto::xfer[0m[2m:[0m enqueueing message:QUERY:[Query { name: Name("_mongodb._tcp.cluster0.02fhmf7.mongodb.net."), query_type: SRV, query_class: IN }]
+[2m2026-01-15T02:14:13.931753Z[0m [34mDEBUG[0m [2mhickory_proto::udp::udp_client_stream[0m[2m:[0m final message: ; header 60062:QUERY:RD:NoError:QUERY:0/0/0
+; query
+;; _mongodb._tcp.cluster0.02fhmf7.mongodb.net. IN SRV
+
+[2m2026-01-15T02:14:13.931863Z[0m [34mDEBUG[0m [2mhickory_proto::udp::udp_stream[0m[2m:[0m created socket successfully
+[2m2026-01-15T02:14:13.986074Z[0m [34mDEBUG[0m [2mhickory_proto::udp::udp_client_stream[0m[2m:[0m received message id: 60062
+[2m2026-01-15T02:14:13.988003Z[0m [34mDEBUG[0m [2mhickory_proto::error[0m[2m:[0m response: ; header 60062:RESPONSE:RD,RA:NoError:QUERY:3/0/0
+; query
+;; _mongodb._tcp.cluster0.02fhmf7.mongodb.net. IN SRV
+; answers 3
+_mongodb._tcp.cluster0.02fhmf7.mongodb.net. 60 IN SRV 0 0 27017 ac-h5unvik-shard-00-02.02fhmf7.mongodb.net.
+_mongodb._tcp.cluster0.02fhmf7.mongodb.net. 60 IN SRV 0 0 27017 ac-h5unvik-shard-00-01.02fhmf7.mongodb.net.
+_mongodb._tcp.cluster0.02fhmf7.mongodb.net. 60 IN SRV 0 0 27017 ac-h5unvik-shard-00-00.02fhmf7.mongodb.net.
+; nameservers 0
+; additionals 0
+
+[2m2026-01-15T02:14:13.988088Z[0m [34mDEBUG[0m [2mhickory_proto::error[0m[2m:[0m response: ; header 60062:RESPONSE:RD,RA:NoError:QUERY:3/0/0
+; query
+;; _mongodb._tcp.cluster0.02fhmf7.mongodb.net. IN SRV
+; answers 3
+_mongodb._tcp.cluster0.02fhmf7.mongodb.net. 60 IN SRV 0 0 27017 ac-h5unvik-shard-00-02.02fhmf7.mongodb.net.
+_mongodb._tcp.cluster0.02fhmf7.mongodb.net. 60 IN SRV 0 0 27017 ac-h5unvik-shard-00-01.02fhmf7.mongodb.net.
+_mongodb._tcp.cluster0.02fhmf7.mongodb.net. 60 IN SRV 0 0 27017 ac-h5unvik-shard-00-00.02fhmf7.mongodb.net.
+; nameservers 0
+; additionals 0
+
+[2m2026-01-15T02:14:13.988223Z[0m [34mDEBUG[0m [2mhickory_proto::xfer::dns_handle[0m[2m:[0m querying: cluster0.02fhmf7.mongodb.net. TXT
+[2m2026-01-15T02:14:13.988248Z[0m [34mDEBUG[0m [2mhickory_resolver::name_server::name_server_pool[0m[2m:[0m sending request: [Query { name: Name("cluster0.02fhmf7.mongodb.net."), query_type: TXT, query_class: IN }]
+[2m2026-01-15T02:14:13.988271Z[0m [34mDEBUG[0m [2mhickory_resolver::name_server::name_server[0m[2m:[0m existing connection: NameServerConfig { socket_addr: 192.168.100.1:53, protocol: Udp, tls_dns_name: None, http_endpoint: None, trust_negative_responses: false, bind_addr: None }
+[2m2026-01-15T02:14:13.988286Z[0m [34mDEBUG[0m [2mhickory_proto::xfer[0m[2m:[0m enqueueing message:QUERY:[Query { name: Name("cluster0.02fhmf7.mongodb.net."), query_type: TXT, query_class: IN }]
+[2m2026-01-15T02:14:13.988376Z[0m [34mDEBUG[0m [2mhickory_proto::udp::udp_client_stream[0m[2m:[0m final message: ; header 28894:QUERY:RD:NoError:QUERY:0/0/0
+; query
+;; cluster0.02fhmf7.mongodb.net. IN TXT
+
+[2m2026-01-15T02:14:13.990190Z[0m [34mDEBUG[0m [2mhickory_proto::udp::udp_stream[0m[2m:[0m created socket successfully
+[2m2026-01-15T02:14:14.052173Z[0m [34mDEBUG[0m [2mhickory_proto::udp::udp_client_stream[0m[2m:[0m received message id: 28894
+[2m2026-01-15T02:14:14.052507Z[0m [34mDEBUG[0m [2mhickory_proto::error[0m[2m:[0m response: ; header 28894:RESPONSE:RD,RA:NoError:QUERY:1/0/0
+; query
+;; cluster0.02fhmf7.mongodb.net. IN TXT
+; answers 1
+cluster0.02fhmf7.mongodb.net. 60 IN TXT authSource=admin&replicaSet=atlas-fxh2up-shard-0
+; nameservers 0
+; additionals 0
+
+[2m2026-01-15T02:14:14.052890Z[0m [34mDEBUG[0m [2mhickory_proto::error[0m[2m:[0m response: ; header 28894:RESPONSE:RD,RA:NoError:QUERY:1/0/0
+; query
+;; cluster0.02fhmf7.mongodb.net. IN TXT
+; answers 1
+cluster0.02fhmf7.mongodb.net. 60 IN TXT authSource=admin&replicaSet=atlas-fxh2up-shard-0
+; nameservers 0
+; additionals 0
+
+connect to mongodb+srv://anhdoo1211_db_user:a4kzwsizmPRvkyz8@cluster0.02fhmf7.mongodb.net/?appName=Cluster0::mongodb+srv://anhdoo1211_db_user:a4kzwsizmPRvkyz8@cluster0.02fhmf7.mongodb.net/test?appName=cluster0
+[2m2026-01-15T02:14:14.053099Z[0m [34mDEBUG[0m [2mhickory_proto::xfer::dns_exchange[0m[2m:[0m io_stream is done, shutting down
+[2m2026-01-15T02:14:14.053332Z[0m [32m INFO[0m [2mdatabase[0m[2m:[0m initializing database connection...
+[2m2026-01-15T02:14:14.053342Z[0m [32m INFO[0m [2mserver::app[0m[2m:[0m Connected successfully
+[2m2026-01-15T02:14:14.053347Z[0m [32m INFO[0m [2mserver::services[0m[2m:[0m initializing services...
+[2m2026-01-15T02:14:14.275676Z[0m [34mDEBUG[0m [2mrustls::client::hs[0m[2m:[0m No cached session for DnsName("ac-h5unvik-shard-00-01.02fhmf7.mongodb.net")
+[2m2026-01-15T02:14:14.275707Z[0m [34mDEBUG[0m [2mrustls::client::hs[0m[2m:[0m Not resuming any session
+[2m2026-01-15T02:14:14.291348Z[0m [34mDEBUG[0m [2mrustls::client::hs[0m[2m:[0m No cached session for DnsName("ac-h5unvik-shard-00-00.02fhmf7.mongodb.net")
+[2m2026-01-15T02:14:14.291400Z[0m [34mDEBUG[0m [2mrustls::client::hs[0m[2m:[0m Not resuming any session
+[2m2026-01-15T02:14:14.405740Z[0m [34mDEBUG[0m [2mrustls::client::hs[0m[2m:[0m Using ciphersuite TLS13_AES_128_GCM_SHA256
+[2m2026-01-15T02:14:14.405780Z[0m [34mDEBUG[0m [2mrustls::client::tls13[0m[2m:[0m Not resuming
+[2m2026-01-15T02:14:14.405983Z[0m [34mDEBUG[0m [2mrustls::client::tls13[0m[2m:[0m TLS1.3 encrypted extensions: ServerExtensions { unknown_extensions: {}, .. }
+[2m2026-01-15T02:14:14.405999Z[0m [34mDEBUG[0m [2mrustls::client::hs[0m[2m:[0m ALPN protocol is None
+[2m2026-01-15T02:14:14.406020Z[0m [34mDEBUG[0m [2mrustls::client::tls13[0m[2m:[0m Got CertificateRequest CertificateRequestPayloadTls13 { context: , extensions: CertificateRequestExtensions { signature_algorithms: [RSA_PSS_SHA256, ECDSA_NISTP256_SHA256, ED25519, RSA_PSS_SHA384, RSA_PSS_SHA512, RSA_PKCS1_SHA256, RSA_PKCS1_SHA384, RSA_PKCS1_SHA512, ECDSA_NISTP384_SHA384, ECDSA_NISTP521_SHA512, RSA_PKCS1_SHA1, ECDSA_SHA1_Legacy], .. } }
+[2m2026-01-15T02:14:14.406035Z[0m [34mDEBUG[0m [2mrustls::client::common[0m[2m:[0m Client auth requested but no cert/sigscheme available
+[2m2026-01-15T02:14:14.416270Z[0m [34mDEBUG[0m [2mrustls::client::hs[0m[2m:[0m No cached session for DnsName("ac-h5unvik-shard-00-02.02fhmf7.mongodb.net")
+[2m2026-01-15T02:14:14.416298Z[0m [34mDEBUG[0m [2mrustls::client::hs[0m[2m:[0m Not resuming any session
+[2m2026-01-15T02:14:14.417527Z[0m [34mDEBUG[0m [2mrustls::client::hs[0m[2m:[0m Using ciphersuite TLS13_AES_128_GCM_SHA256
+[2m2026-01-15T02:14:14.417551Z[0m [34mDEBUG[0m [2mrustls::client::tls13[0m[2m:[0m Not resuming
+[2m2026-01-15T02:14:14.417704Z[0m [34mDEBUG[0m [2mrustls::client::tls13[0m[2m:[0m TLS1.3 encrypted extensions: ServerExtensions { unknown_extensions: {}, .. }
+[2m2026-01-15T02:14:14.417714Z[0m [34mDEBUG[0m [2mrustls::client::hs[0m[2m:[0m ALPN protocol is None
+[2m2026-01-15T02:14:14.417729Z[0m [34mDEBUG[0m [2mrustls::client::tls13[0m[2m:[0m Got CertificateRequest CertificateRequestPayloadTls13 { context: , extensions: CertificateRequestExtensions { signature_algorithms: [RSA_PSS_SHA256, ECDSA_NISTP256_SHA256, ED25519, RSA_PSS_SHA384, RSA_PSS_SHA512, RSA_PKCS1_SHA256, RSA_PKCS1_SHA384, RSA_PKCS1_SHA512, ECDSA_NISTP384_SHA384, ECDSA_NISTP521_SHA512, RSA_PKCS1_SHA1, ECDSA_SHA1_Legacy], .. } }
+[2m2026-01-15T02:14:14.417749Z[0m [34mDEBUG[0m [2mrustls::client::common[0m[2m:[0m Client auth requested but no cert/sigscheme available
+[2m2026-01-15T02:14:14.518751Z[0m [34mDEBUG[0m [2mrustls::client::hs[0m[2m:[0m Using ciphersuite TLS13_AES_128_GCM_SHA256
+[2m2026-01-15T02:14:14.518784Z[0m [34mDEBUG[0m [2mrustls::client::tls13[0m[2m:[0m Not resuming
+[2m2026-01-15T02:14:14.519013Z[0m [34mDEBUG[0m [2mrustls::client::tls13[0m[2m:[0m TLS1.3 encrypted extensions: ServerExtensions { unknown_extensions: {}, .. }
+[2m2026-01-15T02:14:14.519025Z[0m [34mDEBUG[0m [2mrustls::client::hs[0m[2m:[0m ALPN protocol is None
+[2m2026-01-15T02:14:14.519042Z[0m [34mDEBUG[0m [2mrustls::client::tls13[0m[2m:[0m Got CertificateRequest CertificateRequestPayloadTls13 { context: , extensions: CertificateRequestExtensions { signature_algorithms: [RSA_PSS_SHA256, ECDSA_NISTP256_SHA256, ED25519, RSA_PSS_SHA384, RSA_PSS_SHA512, RSA_PKCS1_SHA256, RSA_PKCS1_SHA384, RSA_PKCS1_SHA512, ECDSA_NISTP384_SHA384, ECDSA_NISTP521_SHA512, RSA_PKCS1_SHA1, ECDSA_SHA1_Legacy], .. } }
+[2m2026-01-15T02:14:14.519058Z[0m [34mDEBUG[0m [2mrustls::client::common[0m[2m:[0m Client auth requested but no cert/sigscheme available
+[2m2026-01-15T02:14:14.553997Z[0m [34mDEBUG[0m [2mrustls::client::hs[0m[2m:[0m Resuming session
+[2m2026-01-15T02:14:14.571188Z[0m [34mDEBUG[0m [2mrustls::client::hs[0m[2m:[0m Resuming session
+[2m2026-01-15T02:14:14.625736Z[0m [34mDEBUG[0m [2mrustls::client::hs[0m[2m:[0m Using ciphersuite TLS13_AES_128_GCM_SHA256
+[2m2026-01-15T02:14:14.625773Z[0m [34mDEBUG[0m [2mrustls::client::tls13[0m[2m:[0m Resuming using PSK
+[2m2026-01-15T02:14:14.625974Z[0m [34mDEBUG[0m [2mrustls::client::tls13[0m[2m:[0m TLS1.3 encrypted extensions: ServerExtensions { unknown_extensions: {}, .. }
+[2m2026-01-15T02:14:14.625986Z[0m [34mDEBUG[0m [2mrustls::client::hs[0m[2m:[0m ALPN protocol is None
+[2m2026-01-15T02:14:14.648246Z[0m [34mDEBUG[0m [2mrustls::client::hs[0m[2m:[0m Using ciphersuite TLS13_AES_128_GCM_SHA256
+[2m2026-01-15T02:14:14.648279Z[0m [34mDEBUG[0m [2mrustls::client::tls13[0m[2m:[0m Resuming using PSK
+[2m2026-01-15T02:14:14.648450Z[0m [34mDEBUG[0m [2mrustls::client::tls13[0m[2m:[0m TLS1.3 encrypted extensions: ServerExtensions { unknown_extensions: {}, .. }
+[2m2026-01-15T02:14:14.648461Z[0m [34mDEBUG[0m [2mrustls::client::hs[0m[2m:[0m ALPN protocol is None
+[2m2026-01-15T02:14:14.663307Z[0m [34mDEBUG[0m [2mrustls::client::hs[0m[2m:[0m Resuming session
+[2m2026-01-15T02:14:14.738725Z[0m [34mDEBUG[0m [2mrustls::client::hs[0m[2m:[0m Using ciphersuite TLS13_AES_128_GCM_SHA256
+[2m2026-01-15T02:14:14.738768Z[0m [34mDEBUG[0m [2mrustls::client::tls13[0m[2m:[0m Resuming using PSK
+[2m2026-01-15T02:14:14.739001Z[0m [34mDEBUG[0m [2mrustls::client::tls13[0m[2m:[0m TLS1.3 encrypted extensions: ServerExtensions { unknown_extensions: {}, .. }
+[2m2026-01-15T02:14:14.739021Z[0m [34mDEBUG[0m [2mrustls::client::hs[0m[2m:[0m ALPN protocol is None

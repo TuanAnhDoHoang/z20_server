@@ -105,20 +105,25 @@ impl WalrusController {
             return Err(utils::AppError::InternalServerError);
         }
 
+        println!("blob_info: {:?}", blob_info);
+
         let response = upload_walrus_site(blob_info.blob_father_path()).await?;
 
-        if response.success {
-            let mut blob_update_dto = BlobUpdateDto::default();
-            blob_update_dto.set_project_id(project_id.unwrap().to_owned());
-            blob_update_dto.set_blob_id(response.object_id.clone().unwrap());
+        // if response.success {
+        //     let mut blob_update_dto = BlobUpdateDto::default();
+        //     blob_update_dto.set_project_id(project_id.unwrap().to_owned());
+        //     blob_update_dto.set_blob_id(response.object_id.clone().unwrap());
 
-            let project_service = services.project;
-            match project_service.update_walrus_site(&blob_update_dto).await {
-                Ok(_) => Ok(Json(response)),
-                Err(_) => Err(AppError::InternalServerError),
-            }
-        } else {
-            Err(AppError::BadRequest("Your site upload fail".to_string()))
-        }
+        //     println!("Update to database...");
+
+        //     let project_service = services.project;
+        //     match project_service.update_walrus_site(&blob_update_dto).await {
+        //         Ok(_) => Ok(Json(response)),
+        //         Err(e) => Err(AppError::InternalServerErrorWithContext(e.to_string())),
+        //     }
+        // } else {
+        //     Err(AppError::BadRequest("Your site upload fail".to_string()))
+        // }
+        Ok(Json(response))
     }
 }

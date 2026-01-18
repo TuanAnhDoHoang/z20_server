@@ -47,4 +47,4 @@ logs/*
 data
 .data
 
-.env*
+.env
